@@ -1,0 +1,4 @@
+﻿  main.cpp
+d:\work_place_game\testlentpitchshifter\testlentpitchshifter\delay.h(40): warning C4267: 'return': conversion from 'size_t' to 'unsigned long', possible loss of data
+d:\work_place_game\testlentpitchshifter\testlentpitchshifter\main.cpp(63): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  testLentPitchshifter.vcxproj -> D:\Work_place_game\testLentPitchshifter\x64\Debug\testLentPitchshifter.exe
