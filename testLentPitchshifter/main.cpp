@@ -21,7 +21,7 @@ int check_path(char * path)
 }
 
 void usage() {
-	printf(" executable.exe -shift (recommend <0.5) number_of_scaleData .\\folderName\\");
+	printf(" executable.exe -shift (recommend <0.5) number_of_scaleData (ex: 100) .\\folderName\\");
 }
 
 int find_args(int argc, char * argv[], char * arg)
@@ -153,7 +153,7 @@ void mainProcess(StkFloat shift_period, int numData, char* tpath) {
 	int  label_cur = 0, i = 0, bound = 0;
 	char *label = (char *)malloc(sizeof(char) * 2);
 
-	int size = 0, max_index;
+	int size = 0, max_index,sum=0;
 	const char *default_ext = ".txt";
 
 	size_t len_path = strlen(tpath);
@@ -161,6 +161,8 @@ void mainProcess(StkFloat shift_period, int numData, char* tpath) {
 	char *path2 = (char *)malloc(sizeof(char) * (len_path + 11));
 
 	char *path_conf = (char *)malloc(sizeof(char) * (len_path + 10 + 11));
+	char *path_info = (char *)malloc(sizeof(char) * (len_path + 10 + 11));
+
 
 
 	len_path = strlen(path);
@@ -168,8 +170,14 @@ void mainProcess(StkFloat shift_period, int numData, char* tpath) {
 	strcpy(path, tpath);
 	strcat(path, "realData\\");
 
+	strcpy(path2, tpath);
+	strcat(path2, "scaleData\\");
+
 	strcpy(path_conf, path);
 	strcat(path_conf, "config.txt");
+
+	strcpy(path_info, path2);
+	strcat(path_info, "info.txt");
 
 	int dem = 0;
 
@@ -177,6 +185,8 @@ void mainProcess(StkFloat shift_period, int numData, char* tpath) {
 	FILE *fconf = fopen(path_conf, "r");
 	fscanf(fconf, "%d", &max_index);
 	fclose(fconf);
+
+	FILE *finf = fopen(path_info, "w");
 
 	while (label_cur < (max_index + 1))
 	{
@@ -212,6 +222,8 @@ void mainProcess(StkFloat shift_period, int numData, char* tpath) {
 			printf("path : %s \n", path_file);
 			if (check_path(path_file)) {
 				free(path_file);
+				sum += bound;
+				fprintf(finf,"%d ", bound);
 				bound = 0;
 				break;
 			}
@@ -231,10 +243,8 @@ void mainProcess(StkFloat shift_period, int numData, char* tpath) {
 
 				for (int n = bound; n < numData + bound; n++) {
 					lshifter.setPeriod(from - (rand() % (numData + 1))*step);
-					strcpy(path2, tpath);
-					strcat(path2, "scaleData\\");
-					sprintf(index2, "%d", n);
 
+					sprintf(index2, "%d", n);
 					size_t len_path_tmp2 = strlen(path2) + strlen(label) + 1;
 					char *temp2 = (char*)malloc(sizeof(char) * len_path_tmp);
 					strcpy(temp2, path2);
@@ -262,4 +272,6 @@ void mainProcess(StkFloat shift_period, int numData, char* tpath) {
 		++label_cur;
 		i = 0;
 	}
+	fprintf(finf, "%d", sum);
+	fclose(finf);
 }
